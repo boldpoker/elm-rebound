@@ -1,11 +1,16 @@
 import Debug
 import Rebound
 import Graphics.Element exposing (..)
+import Color
+import Mouse
+import Signal
 
-main : Element
+main : Signal Element
 main =
-  show 1
+  Signal.map (\v -> view v) (Rebound.spring 1.0)
 
--- TODO: Try using mailboxes for animation states similar to:
--- http://elm-lang.org/edit/examples/Intermediate/Flickr.elm
-
+view : Float -> Element
+view progress =
+  empty
+    |> size (truncate (300 * progress)) (truncate (300 * progress))
+    |> color Color.blue

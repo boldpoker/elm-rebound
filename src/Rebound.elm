@@ -1,7 +1,9 @@
 module Rebound where
 
-import Task exposing (Task)
+import Signal
 import Native.Rebound
+import Time
 
-spring : (Float -> Task () ()) -> Task error ()
+
+spring : Float -> Signal.Signal Float
 spring = Native.Rebound.spring
