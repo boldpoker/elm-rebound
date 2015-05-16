@@ -5,5 +5,5 @@ import Native.Rebound
 import Time
 
 
-spring : Float -> Signal.Signal Float
+spring : Signal.Signal Float -> Signal.Signal Float
 spring = Native.Rebound.spring

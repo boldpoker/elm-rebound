@@ -7,7 +7,7 @@ import Signal
 
 main : Signal Element
 main =
-  Signal.map (\v -> view v) (Rebound.spring 1.0)
+  Signal.map (\v -> view v) (Rebound.spring (Signal.constant 1.0))
 
 view : Float -> Element
 view progress =
