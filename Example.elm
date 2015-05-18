@@ -10,7 +10,11 @@ main : Signal Element
 main =
   Signal.map (\onSpring ->
     view onSpring
-  ) (Rebound.spring springConfig (Signal.foldp (\_ s -> s + 0.1) 0.0 (Time.every 2000)))
+  ) (Rebound.spring springConfig targetValueSignal)
+
+targetValueSignal : Signal.Signal (Float, Float)
+targetValueSignal =
+  Signal.foldp (\_ s -> (fst s + 0.1, snd s)) (0.0, 3.0) (Time.every 2000)
 
 view : Rebound.OnSpring -> Element
 view onSpring =

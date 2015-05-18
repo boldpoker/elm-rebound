@@ -11,8 +11,10 @@ Elm.Native.Rebound.make = function(localRuntime) {
   var Signal = Elm.Signal.make(localRuntime);
   var NS = Elm.Native.Signal.make(localRuntime);
 
-  var createSpringSignal = function(spring, targetValueSignal) {
+  var createSpringSignal = function(spring, targetValueSignalTuple) {
     var ticker = NS.input("spring", { "ctor": "UpdateValue", "_0": 0.0 }); // pass start value
+    var previousVelocity;
+
     spring.addListener({
       onSpringUpdate: function(spring) {
         var val = spring.getCurrentValue();
@@ -21,14 +23,19 @@ Elm.Native.Rebound.make = function(localRuntime) {
       onSpringAtRest: function(spring) {
         var val = spring.getCurrentValue();
         localRuntime.notify(ticker.id, { "ctor": "AtRestValue", "_0": val });
+        previousVelocity = null;
       }
     });
 
     function f(newTargetValue, v) {
-      spring.setEndValue(newTargetValue);
+      if (previousVelocity !== newTargetValue._1) {
+        previousVelocity = newTargetValue._1;
+        spring = spring.setVelocity(newTargetValue._1);
+      }
+      spring.setEndValue(newTargetValue._0);
       return v;
     }
-    return A3(Signal.map2, F2(f), targetValueSignal, ticker);
+    return A3(Signal.map2, F2(f), targetValueSignalTuple, ticker);
   }
 
   var spring = function(config, targetValueSignal) {

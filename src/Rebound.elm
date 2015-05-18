@@ -17,8 +17,8 @@ type alias BouncySpringConfig =
   , speed      : Maybe Int
   }
 
-spring : SpringConfig -> Signal.Signal Float -> Signal.Signal OnSpring
+spring : SpringConfig -> Signal.Signal (Float, Float) -> Signal.Signal OnSpring
 spring = Native.Rebound.spring
 
-springWithBouncinessAndSpeed : BouncySpringConfig -> Signal.Signal Float -> Signal.Signal OnSpring
+springWithBouncinessAndSpeed : BouncySpringConfig -> Signal.Signal (Float, Float) -> Signal.Signal OnSpring
 springWithBouncinessAndSpeed = Native.Rebound.springWithBouncinessAndSpeed
