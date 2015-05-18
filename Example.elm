@@ -14,7 +14,10 @@ main =
 
 targetValueSignal : Signal.Signal (Float, Float)
 targetValueSignal =
-  Signal.foldp (\_ s -> (fst s + 0.1, snd s)) (0.0, 3.0) (Time.every 2000)
+  let
+    maxScale = 2.0
+  in
+    Signal.foldp (\_ s -> (min (fst s + 0.1) maxScale, snd s)) (0.0, 3.0) (Time.every 2000)
 
 view : Rebound.OnSpring -> Element
 view onSpring =
