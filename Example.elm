@@ -8,14 +8,20 @@ import Time
 
 main : Signal Element
 main =
-  Signal.map (\progress ->
-    case progress of
-      Rebound.Value val -> view val
-      Rebound.Complete val -> view val
-  ) (Rebound.spring  (Signal.foldp (\_ s -> s+0.1) 0.0 (Time.every 1000)))
+  Signal.map (\onSpring ->
+    view onSpring
+  ) (Rebound.spring (Signal.foldp (\_ s -> s + 0.1) 0.0 (Time.every 2000)))
 
-view : Float -> Element
-view progress =
-  empty
-    |> size (truncate (300 * progress)) (truncate (300 * progress))
-    |> color Color.blue
+view : Rebound.OnSpring -> Element
+view onSpring =
+  let
+    fill = case onSpring of
+      Rebound.UpdateValue _ -> Color.blue
+      Rebound.AtRestValue _ -> Color.green
+    length = case onSpring of
+      Rebound.UpdateValue val -> Debug.watch "update value" (truncate (300 * val))
+      Rebound.AtRestValue val -> Debug.watch "at rest value" (truncate (300 * val))
+  in
+    empty
+      |> size length length
+      |> color fill
