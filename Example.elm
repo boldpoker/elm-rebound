@@ -10,7 +10,7 @@ main : Signal Element
 main =
   Signal.map (\onSpring ->
     view onSpring
-  ) (Rebound.spring (Signal.foldp (\_ s -> s + 0.1) 0.0 (Time.every 2000)))
+  ) (Rebound.spring springConfig (Signal.foldp (\_ s -> s + 0.1) 0.0 (Time.every 2000)))
 
 view : Rebound.OnSpring -> Element
 view onSpring =
@@ -25,3 +25,6 @@ view onSpring =
     empty
       |> size length length
       |> color fill
+
+springConfig =
+  { tension = Just 8, friction = Just 3 }

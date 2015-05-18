@@ -11,10 +11,8 @@ Elm.Native.Rebound.make = function(localRuntime) {
   var Signal = Elm.Signal.make(localRuntime);
   var NS = Elm.Native.Signal.make(localRuntime);
 
-  function spring(targetValueSignal) {
+  var createSpringSignal = function(spring, targetValueSignal) {
     var ticker = NS.input("spring", { "ctor": "UpdateValue", "_0": 0.0 }); // pass start value
-    var springSystem = new rebound.SpringSystem();
-    var spring = springSystem.createSpring(50, 3);
     spring.addListener({
       onSpringUpdate: function(spring) {
         var val = spring.getCurrentValue();
@@ -31,10 +29,33 @@ Elm.Native.Rebound.make = function(localRuntime) {
       return v;
     }
     return A3(Signal.map2, F2(f), targetValueSignal, ticker);
+  }
+
+  var spring = function(config, targetValueSignal) {
+    var springSystem = new rebound.SpringSystem();
+    if (config.tension && config.tension.ctor === "Just" && config.friction && config.friction.ctor === "Just") {
+      var spring = springSystem.createSpring(config.tension._0, config.friction._0);
+    } else {
+      var spring = springSystem.createSpring();
+    }
+    return createSpringSignal(spring, targetValueSignal);
+  };
+
+  var springWithBouncinessAndSpeed = function(config, targetValueSignal) {
+    var springSystem = new rebound.SpringSystem();
+    if (config.bounciness && config.bounciness.ctor === "Just" && config.speed && config.speed.ctor === "Just") {
+      var spring = springSystem.createSpringWithBouncinessAndSpeed(config.bounciness, config.speed);
+    } else {
+      springSystem.createSpringWithBouncinessAndSpeed();
+    }
+    return function() {
+      createSpringSignal(spring, targetValueSignal);
+    };
   };
 
   return localRuntime.Native.Rebound.values = {
-    spring: spring
+    spring: F2(spring),
+    springWithBouncinessAndSpeed: F2(springWithBouncinessAndSpeed)
   };
 };
 
