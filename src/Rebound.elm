@@ -2,12 +2,10 @@ module Rebound where
 
 import Signal
 import Native.Rebound
-import Time
 
-type Progress
-  = Value Float
-  | Complete Float
+type OnSpring
+  = UpdateValue Float
+  | AtRestValue Float
 
-
-spring : Signal.Signal Float -> Signal.Signal Progress
+spring : Signal.Signal Float -> Signal.Signal OnSpring
 spring = Native.Rebound.spring
