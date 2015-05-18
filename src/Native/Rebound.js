@@ -28,9 +28,12 @@ Elm.Native.Rebound.make = function(localRuntime) {
     });
 
     function f(newTargetValue, v) {
-      if (previousVelocity !== newTargetValue._1) {
-        previousVelocity = newTargetValue._1;
-        spring = spring.setVelocity(newTargetValue._1);
+      if (newTargetValue._1 && newTargetValue._1.ctor === "Just") {
+        var velocity = newTargetValue._1._0;
+      }
+      if (velocity && previousVelocity !== velocity) {
+        previousVelocity = velocity;
+        spring = spring.setVelocity(velocity);
       }
       spring.setEndValue(newTargetValue._0);
       return v;

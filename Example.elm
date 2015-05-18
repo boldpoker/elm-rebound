@@ -12,12 +12,14 @@ main =
     view onSpring
   ) (Rebound.spring springConfig targetValueSignal)
 
-targetValueSignal : Signal.Signal (Float, Float)
+targetValueSignal : Signal.Signal (Float, Maybe Float)
 targetValueSignal =
   let
+    minScale = 0.0
     maxScale = 2.0
+    velocity = Just 1.5
   in
-    Signal.foldp (\_ s -> (min (fst s + 0.1) maxScale, snd s)) (0.0, 3.0) (Time.every 2000)
+    Signal.foldp (\_ s -> (min (fst s + 0.1) maxScale, snd s)) (minScale, velocity) (Time.every 2000)
 
 view : Rebound.OnSpring -> Element
 view onSpring =
