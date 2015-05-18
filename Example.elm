@@ -4,10 +4,15 @@ import Graphics.Element exposing (..)
 import Color
 import Mouse
 import Signal
+import Time
 
 main : Signal Element
 main =
-  Signal.map (\v -> view v) (Rebound.spring (Signal.constant 1.0))
+  Signal.map (\progress ->
+    case progress of
+      Rebound.Value val -> view val
+      Rebound.Complete val -> view val
+  ) (Rebound.spring  (Signal.foldp (\_ s -> s+0.1) 0.0 (Time.every 1000)))
 
 view : Float -> Element
 view progress =

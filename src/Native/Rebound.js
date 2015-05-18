@@ -12,13 +12,16 @@ Elm.Native.Rebound.make = function(localRuntime) {
   var NS = Elm.Native.Signal.make(localRuntime);
 
   function spring(targetValueSignal) {
-    var ticker = NS.input()
+    var ticker = NS.input("spring", {"ctor": "Value", "_0": 0.0}); // pass start value
     var springSystem = new rebound.SpringSystem();
     var spring = springSystem.createSpring(50, 3);
     spring.addListener({
       onSpringUpdate: function(spring) {
         var val = spring.getCurrentValue();
-        localRuntime.notify(ticker.id, val);
+        localRuntime.notify(ticker.id, {"ctor": "Value", "_0": val});
+      },
+      onSpringAtRest: function() {
+        localRuntime.notify(ticker.id, {"ctor": "Complete"});
       }
     });
 
