@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "summary": "A rebound-js wrapper for Elm.",
-  "repository": "https://github.com/joe-loco/elm-rebound.git",
+  "repository": "https://github.com/boldpoker/elm-rebound.git",
   "license": "BSD3",
   "source-directories": [
     "src"
@@ -10,8 +10,9 @@
     "Rebound"
   ],
   "dependencies": {
-    "elm-lang/core": "2.0.0 <= v < 3.0.0"
+    "elm-lang/core": "3.0.0 <= v < 4.0.0",
+    "evancz/elm-effects": "2.0.1 <= v < 3.0.0"
   },
   "native-modules": true,
-  "elm-version": "0.15.0 <= v < 0.16.0"
+  "elm-version": "0.16.0 <= v < 0.17.0"
 }
